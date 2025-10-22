@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    {# #}
+    <div class="row mt-3">
+        {# #}
+        <div class="col-lg-4 mb-4 mb-lg-0">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4><i class="fas fa-upload"></i> 上传音乐</h4>
+                </div>
+                <div class="card-body">
+                    <form id="upload-form" action="{{ url_for('main.upload') }}" method="post" enctype="multipart/form-data">
+                        {{ username_form.csrf_token }}
+                        <div class="mb-3">
+                            <label for="file" class="form-label">选择 MP3 / FLAC 文件 (可多选)</label>
+                            <input class="form-control" type="file" name="file" id="file" multiple accept=".mp3,.flac">
+                        </div>
+                        <button id="upload-submit-btn" type="submit" class="btn btn-primary w-100">
+                            <span id="upload-btn-text">开始上传</span>
+                            <span id="upload-spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="fas fa-user-cog"></i> 账户管理</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs" id="accountTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link {% if active_tab == 'username' %}active{% endif %}" id="username-tab" data-bs-toggle="tab" data-bs-target="#username-panel" type="button" role="tab" aria-controls="username-panel" aria-selected="true">修改用户名</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                             <button class="nav-link {% if active_tab == 'password' %}active{% endif %}" id="password-tab" data-bs-toggle="tab" data-bs-target="#password-panel" type="button" role="tab" aria-controls="password-panel" aria-selected="false">修改密码</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content pt-3" id="accountTabsContent">
+                        <div class="tab-pane fade {% if active_tab == 'username' %}show active{% endif %}" id="username-panel" role="tabpanel" aria-labelledby="username-tab">
+                            <form id="username-change-form" action="{{ url_for('main.change_username') }}" method="POST">
+                                {{ username_form.hidden_tag() }}
+                                <div class="mb-3">
+                                    {{ username_form.new_username.label(class="form-label") }}
+                                    {{ username_form.new_username(id="new_username_input", class="form-control", placeholder="输入4-20位的新用户名") }}
+                                </div>
+                                <button id="username-submit-btn" type="submit" class="btn btn-primary w-100 mt-4">
+                                    <span class="btn-text">确认修改用户名</span>
+                                    <span class="spinner-border spinner-border-sm" style="display: none;"></span>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade {% if active_tab == 'password' %}show active{% endif %}" id="password-panel" role="tabpanel" aria-labelledby="password-tab">
+                            <form id="password-change-form" action="{{ url_for('main.change_password') }}" method="POST">
+                                {{ password_form.hidden_tag() }}
+                                <div class="mb-3">
+                                    {{ password_form.current_password.label(class="form-label") }}
+                                    {{ password_form.current_password(id="current_password_input", class="form-control", placeholder="输入您当前的密码") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ password_form.new_password.label(class="form-label") }}
+                                    {{ password_form.new_password(id="new_password_input", class="form-control", placeholder="输入至少6位的新密码") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ password_form.confirm_password.label(class="form-label") }}
+                                    {{ password_form.confirm_password(id="confirm_password_input", class="form-control", placeholder="再次输入新密码") }}
+                                </div>
+                                <button id="password-submit-btn" type="submit" class="btn btn-primary w-100">
+                                     <span class="btn-text">确认修改密码</span>
+                                     <span class="spinner-border spinner-border-sm" style="display: none;"></span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {# #}
+        <div class="col-lg-8" id="music-list-container">
+            {% include '_music_list.html' %}
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+<div id="flash-messages-data" style="display: none;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            {% set alert_type = 'success' if category.endswith('success') or category == 'success' else 'danger' %}
+            <div class="flash-message" data-message="{{ message }}" data-category="{{ alert_type }}"></div>
+        {% endfor %}
+    {% endwith %}
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+{# #}
+{% set messages = get_flashed_messages(with_categories=true) %}
+
+<div class="full-page-center">
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="site-logo">
+    <div class="auth-card-container">
+        <div class="card">
+            <div class="card-header text-center">
+                <h4>管理员登录</h4>
+            </div>
+            <div class="card-body">
+                <div id="alert-container">
+                    {% if lockout_end %}
+                        <div id="lockout-alert" class="alert alert-danger" role="alert">
+                            <i class="fas fa-hourglass-half me-2"></i>
+                            <span id="countdown-message">正在计算剩余时间...</span>
+                        </div>
+                    {% else %}
+                        {% endif %}
+                </div>
+
+                <form method="POST" action="{{ url_for('auth.login') }}" id="login-form">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group mb-3">
+                        {{ form.username.label(class="form-label") }}
+                        {{ form.username(class="form-control", placeholder="请输入管理员账户", autocomplete="username") }}
+                    </div>
+                    <div class="form-group mb-4">
+                        {{ form.password.label(class="form-label") }}
+                        {{ form.password(class="form-control", placeholder="请输入密码", autocomplete="current-password") }}
+                    </div>
+                    <div class="form-group form-check mb-3">
+                        {{ form.remember_me(class="form-check-input") }}
+                        {{ form.remember_me.label(class="form-check-label") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-primary w-100") }}
+                    </div>
+                </form>
+
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('main.index') }}" class="text-secondary">以游客身份浏览</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="flash-messages-data" style="display: none;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            {# 统一逻辑：映射所有消息到 success 或 danger #}
+            {% set alert_type = 'success' if category == 'success' else 'danger' %}
+            <div class="flash-message" data-message="{{ message }}" data-category="{{ alert_type }}"></div>
+        {% endfor %}
+    {% endwith %}
+</div>
+
+<script>
+    const loginData = {
+        lockoutEnd: {{ lockout_end|tojson }}
+    };
+</script>
+
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+{% endblock %}

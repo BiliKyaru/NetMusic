@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="full-page-center">
+
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="site-logo">
+
+    <div class="auth-card-container text-center">
+        <h1 class="display-1 text-white">404</h1>
+        <h3 class="text-white">Not Found</h3>
+        <p class="text-secondary mt-3">
+            抱歉，您要访问的页面不存在。
+        </p>
+        <div class="mt-4">
+            <a href="{{ url_for('main.index') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-home me-2"></i>返回首页
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

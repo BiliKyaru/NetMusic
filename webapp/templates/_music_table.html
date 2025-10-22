@@ -1,0 +1,62 @@
+<table class="table table-hover align-middle {% if not music_list %}table-empty{% endif %}">
+    <thead>
+        <tr>
+            {% if current_user.is_authenticated %}
+            <th class="col-checkbox">
+                <input class="form-check-input" type="checkbox" id="select-all-music" {% if not music_list %}disabled{% endif %}>
+            </th>
+            {% endif %}
+            <th class="col-title">
+                <a href="{{ url_for(request.endpoint, q=search_query, tab=request.args.get('tab'), sort_by='title', order='asc' if sort_by == 'title' and order == 'desc' else 'desc') }}">
+                    音乐标题
+                    {% if sort_by == 'title' %}
+                        <i class="fas fa-sort-{{ 'up' if order == 'asc' else 'down' }}"></i>
+                    {% endif %}
+                </a>
+            </th>
+            <th class="col-duration d-none d-md-table-cell">
+                <a href="{{ url_for(request.endpoint, q=search_query, tab=request.args.get('tab'), sort_by='duration', order='asc' if sort_by == 'duration' and order == 'desc' else 'desc') }}">
+                    时长
+                    {% if sort_by == 'duration' %}
+                        <i class="fas fa-sort-{{ 'up' if order == 'asc' else 'down' }}"></i>
+                    {% endif %}
+                </a>
+            </th>
+            <th class="col-upload-time d-none d-md-table-cell">
+                <a href="{{ url_for(request.endpoint, q=search_query, tab=request.args.get('tab'), sort_by='upload_time', order='asc' if sort_by == 'upload_time' and order == 'desc' else 'desc') }}">
+                    上传时间
+                    {% if sort_by == 'upload_time' %}
+                        <i class="fas fa-sort-{{ 'up' if order == 'asc' else 'down' }}"></i>
+                    {% endif %}
+                </a>
+                <i class="fas fa-info-circle text-secondary ms-1"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   title="中国标准时间 (CST)"></i>
+            </th>
+            <th class="col-actions text-nowrap">操作</th>
+        </tr>
+    </thead>
+    <tbody id="music-list-body"
+           data-sort-by="{{ sort_by }}"
+           data-order="{{ order }}"
+           data-empty-text="{% if request.endpoint == 'main.admin' %}音乐库为空，请上传您的第一首音乐。{% else %}音乐库为空。{% endif %}"
+           data-no-results-text="未找到与 '{{ search_query }}' 相关的音乐。">
+        
+        {% for music in music_list %}
+            {% include '_music_row.html' %}
+        {% else %}
+            <tr id="empty-music-row">
+                <td colspan="{% if current_user.is_authenticated %}5{% else %}4{% endif %}" class="text-center">
+                    {% if search_query %}
+                        未找到与 '{{ search_query }}' 相关的音乐。
+                    {% elif request.endpoint == 'main.admin' %}
+                        音乐库为空，请上传您的第一首音乐。
+                    {% else %}
+                        音乐库为空。
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

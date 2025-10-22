@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="full-page-center">
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="site-logo">
+    <div class="auth-card-container">
+        <div class="card">
+            <div class="card-header text-center">
+                <h4>创建初始管理员账户</h4>
+            </div>
+            <div class="card-body">
+                <div id="alert-container">
+                    {% if form.errors %}
+                        {% for field, errors in form.errors.items() %}
+                            {% for error in errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <form method="POST" action="{{ url_for('auth.setup') }}" id="setup-form">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group mb-3">
+                        {{ form.username.label(class="form-label") }}
+                        {{ form.username(class="form-control", placeholder="输入4-20位用户名") }}
+                    </div>
+                    <div class="form-group mb-4">
+                        {{ form.password.label(class="form-label") }}
+                        {{ form.password(class="form-control", placeholder="输入至少6位的密码") }}
+                    </div>
+                    <div class="form-group mb-4">
+                        {{ form.confirm_password.label(class="form-label") }}
+                        {{ form.confirm_password(class="form-control", placeholder="请再次输入密码") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-primary w-100") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

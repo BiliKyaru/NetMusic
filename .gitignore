@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Instance Folder (contains database and secrets)
+instance/
+uploads/
+
+# IDE and OS specific
+.idea/
+.vscode/
+.DS_Store
+.env

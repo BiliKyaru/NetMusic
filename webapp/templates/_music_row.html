@@ -1,0 +1,34 @@
+<tr id="music-row-{{ music.id }}">
+    {% if current_user.is_authenticated %}
+    <td class="col-checkbox">
+        <input class="form-check-input music-item-checkbox" type="checkbox" value="{{ music.id }}">
+    </td>
+    {% endif %}
+    <td class="col-title" title="{{ music.original_name }}">
+        <div class="d-flex align-items-center">
+            <span class="music-title">{{ music.original_name }}</span>
+
+            {% if music.stored_name.lower().endswith('.mp3') %}
+                <span class="badge rounded-pill badge-mp3 ms-2">MP3</span>
+            {% elif music.stored_name.lower().endswith('.flac') %}
+                <span class="badge rounded-pill badge-flac ms-2">FLAC</span>
+            {% endif %}
+        </div>
+    </td>
+    <td class="col-duration d-none d-md-table-cell">{{ '%02d:%02d' % (music.duration // 60, music.duration % 60) if music.duration else '未知' }}</td>
+    <td class="col-upload-time d-none d-md-table-cell">
+        {{ music.local_upload_time.strftime('%Y-%m-%d %H:%M') }}
+    </td>
+    <td class="col-actions text-nowrap">
+        <div class="dropdown">
+            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton-{{ music.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                操作
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{ music.id }}">
+                <li><a class="dropdown-item" href="#" onclick="copyLink('{{ url_for('main.music', filename=music.stored_name, _external=True) }}', '播放链接已复制！'); return false;"><i class="fas fa-link fa-fw me-2 text-muted"></i>复制链接</a></li>
+                <li><a class="dropdown-item" href="#" onclick="copyLink('{{ music.original_name }}', '歌曲名已复制！'); return false;"><i class="fas fa-tag fa-fw me-2 text-muted"></i>复制歌名</a></li>
+                <li><a class="dropdown-item" href="#" onclick="copyLink('{{ music.duration }}', '时长(秒)已复制！'); return false;"><i class="fas fa-clock fa-fw me-2 text-muted"></i>复制时长</a></li>
+            </ul>
+        </div>
+    </td>
+</tr>

@@ -1,0 +1,10 @@
+services:
+  netmusic:
+    build: .
+    container_name: netmusic
+    ports:
+      - "3355:3355"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./instance:/app/instance
+    restart: unless-stopped
