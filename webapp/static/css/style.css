@@ -453,6 +453,7 @@ body {
 /* --- 自适应音乐列表布局 --- */
 #music-list-container {
     height: calc(100vh - 4.5rem);
+    transition: height 0.3s ease-in-out;
 }
 
 #music-list-container .card {
@@ -472,7 +473,12 @@ body {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+    transform: translateY(120%);
     transition: transform 0.3s ease-in-out;
+}
+
+#global-player-bar.show {
+    transform: translateY(0);
 }
 
 @media (max-width: 768px) {
@@ -518,4 +524,9 @@ body {
 audio::-webkit-media-controls-panel {
     background-color: #e0e0e0;
     border-radius: 4px;
+}
+
+/* --- 播放器出现时的布局自适应 --- */
+body.has-player #music-list-container {
+    height: calc(100vh - 4.5rem - 85px) !important;
 }

@@ -262,6 +262,8 @@ function handleListInteraction(event) {
     }, 300);
 }
 
+let playerHideTimeout;
+
 function previewMusic(url, title) {
     const playerBar = document.getElementById('global-player-bar');
     const audioEl = document.getElementById('global-audio-element');
@@ -269,16 +271,24 @@ function previewMusic(url, title) {
 
     if (!playerBar || !audioEl) return;
 
+    if (playerHideTimeout) {
+        clearTimeout(playerHideTimeout);
+        playerHideTimeout = null;
+    }
     playerBar.style.display = 'block';
+    setTimeout(() => {
+        playerBar.classList.add('show');
+    }, 10);
 
     titleEl.textContent = title || '正在试听...';
 
+    document.body.classList.add('has-player');
+
     audioEl.src = url;
-    audioEl.play()
-        .catch(e => {
-            console.error(e);
-            showDynamicAlert('播放失败，可能是浏览器不支持该格式。', 'danger');
-        });
+    audioEl.play().catch(e => {
+        console.error(e);
+        showDynamicAlert('播放失败，可能是浏览器不支持该格式。', 'danger');
+    });
 }
 
 function closePlayer() {
@@ -287,10 +297,18 @@ function closePlayer() {
 
     if (audioEl) {
         audioEl.pause();
-        audioEl.currentTime = 0; // 重置进度
+        audioEl.currentTime = 0;
     }
 
     if (playerBar) {
-        playerBar.style.display = 'none';
+        playerBar.classList.remove('show');
     }
+
+    document.body.classList.remove('has-player');
+
+    playerHideTimeout = setTimeout(() => {
+        if (playerBar) {
+            playerBar.style.display = 'none';
+        }
+    }, 300);
 }
