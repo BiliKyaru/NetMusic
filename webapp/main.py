@@ -197,11 +197,12 @@ def _process_uploaded_file_task(app, file_content, original_name_full, user_id):
                 raise ValueError(error_msg)
 
             # 检查MD5是否重复
-            if Music.query.filter_by(md5_hash=file_hash).first():
-                current_app.logger.info(f"后台跳过重复文件: {original_name_full}")
+            existing_music = Music.query.filter_by(md5_hash=file_hash).first()
+            if existing_music:
+                current_app.logger.info(f"后台跳过重复文件: {original_name_full} (冲突ID: {existing_music.id})")
                 socketio.emit('upload_status', {
-                    'message': f'文件 {original_name_full} 已存在，已跳过。',
-                    'category': 'info'
+                    'message': f'文件已存在！数据库中已有名为 "{existing_music.original_name}" (ID: {existing_music.id}) 的相同文件。',
+                    'category': 'danger'
                 })
                 return
 
