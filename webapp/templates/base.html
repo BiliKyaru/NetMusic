@@ -46,6 +46,23 @@
     {% block content %}{% endblock %}
 </main>
 
+<div id="global-player-bar" class="fixed-bottom bg-dark border-top border-secondary p-2" style="display: none; z-index: 1030;">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center text-truncate me-3" style="max-width: 30%;">
+            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px; min-width: 32px;">
+                <i class="fas fa-music text-white"></i>
+            </div>
+            <span id="player-song-title" class="text-light text-truncate">正在播放...</span>
+        </div>
+
+        <audio id="global-audio-element" controls style="width: 100%; max-width: 600px; height: 32px;"></audio>
+
+        <button class="btn btn-link text-secondary ms-3" onclick="closePlayer()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+</div>
+
 <script src="{{ url_for('static', filename='lib/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ url_for('static', filename='lib/socket.io.min.js') }}"></script>
 

@@ -261,3 +261,36 @@ function handleListInteraction(event) {
             });
     }, 300);
 }
+
+function previewMusic(url, title) {
+    const playerBar = document.getElementById('global-player-bar');
+    const audioEl = document.getElementById('global-audio-element');
+    const titleEl = document.getElementById('player-song-title');
+
+    if (!playerBar || !audioEl) return;
+
+    playerBar.style.display = 'block';
+
+    titleEl.textContent = title || '正在试听...';
+
+    audioEl.src = url;
+    audioEl.play()
+        .catch(e => {
+            console.error(e);
+            showDynamicAlert('播放失败，可能是浏览器不支持该格式。', 'danger');
+        });
+}
+
+function closePlayer() {
+    const playerBar = document.getElementById('global-player-bar');
+    const audioEl = document.getElementById('global-audio-element');
+
+    if (audioEl) {
+        audioEl.pause();
+        audioEl.currentTime = 0; // 重置进度
+    }
+
+    if (playerBar) {
+        playerBar.style.display = 'none';
+    }
+}
