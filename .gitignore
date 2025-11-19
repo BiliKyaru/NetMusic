@@ -1,20 +1,41 @@
-# Python
+# 忽略 Python 编译文件
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
 
-# Virtual Environment
+# 忽略系统生成的文件
+# Mac 系统
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows 系统
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Docker
+.dockerignore
+
+# 忽略虚拟环境
 venv/
-env/
 .venv/
+env/
+ENV/
 
-# Instance Folder (contains database and secrets)
-instance/
-uploads/
-
-# IDE and OS specific
+# 忽略 IDE 配置文件
 .idea/
 .vscode/
-.DS_Store
+*.swp
+
+# 忽略本地数据库
+instance/
+*.db
+*.sqlite3
+
+# 忽略上传的音乐文件
+uploads/
+
+# 忽略环境变量文件
 .env
+.flaskenv
